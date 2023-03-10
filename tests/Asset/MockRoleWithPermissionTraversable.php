@@ -1,23 +1,23 @@
 <?php
 
 
-namespace LmcRbacMvcTest\Asset;
+namespace LmcRbacMvcDevToolsTest\Asset;
 
 use Rbac\Role\RoleInterface;
 
 
 class MockRoleWithPermissionTraversable implements RoleInterface
 {
-    public function getPermissions()
+    public function getPermissions(): \ArrayObject
     {
         return new \ArrayObject(['permission-method-a', 'permission-method-b']);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'role-with-permission-traversable';
     }
-    public function hasPermission($permission)
+    public function hasPermission($permission): bool
     {
         return false;
     }

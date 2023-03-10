@@ -18,7 +18,6 @@
 
 return [
     'modules' => [
-        'Laminas\Router',
         'LmcRbacMvc',
     ],
     'module_listener_options' => [

@@ -16,8 +16,9 @@
  * and is licensed under the MIT license.
  */
 
-namespace LmcRbacMvcTest\Util;
+namespace LmcRbacMvcDevToolsTest\Util;
 
+use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\ServiceManager\ServiceManager;
 
@@ -32,13 +33,13 @@ abstract class ServiceManagerFactory
     /**
      * @var array
      */
-    private static $config = [];
+    private static array $config = [];
 
     /**
      * @static
      * @param array $config
      */
-    public static function setApplicationConfig(array $config)
+    public static function setApplicationConfig(array $config): void
     {
         static::$config = $config;
     }
@@ -47,7 +48,7 @@ abstract class ServiceManagerFactory
      * @static
      * @return array
      */
-    public static function getApplicationConfig()
+    public static function getApplicationConfig(): array
     {
         return static::$config;
     }
@@ -56,18 +57,18 @@ abstract class ServiceManagerFactory
      * @param array|null $config
      * @return ServiceManager
      */
-    public static function getServiceManager(array $config = null)
+    public static function getServiceManager(array $config = null): ServiceManager
     {
         $config = $config ?: static::getApplicationConfig();
         $serviceManagerConfig = new ServiceManagerConfig(
-            isset($config['service_manager']) ? $config['service_manager'] : []
+            $config['service_manager'] ?? []
         );
         $serviceManager = new ServiceManager();
         $serviceManagerConfig->configureServiceManager($serviceManager);
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->setAllowOverride(true);
 
-        /* @var $moduleManager \Laminas\ModuleManager\ModuleManagerInterface */
+        /* @var $moduleManager ModuleManagerInterface */
         $moduleManager = $serviceManager->get('ModuleManager');
 
         $moduleManager->loadModules();

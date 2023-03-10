@@ -16,27 +16,27 @@
  * and is licensed under the MIT license.
  */
 
-namespace LmcRbacMvcTest\Collector;
+namespace LmcRbacMvcDevToolsTest\Collector;
 
 use Laminas\ServiceManager\ServiceManager;
 use LmcRbacMvc\Identity\IdentityInterface;
-use LmcRbacMvcTest\Asset\MockRoleWithPermissionTraversable;
+use LmcRbacMvcDevToolsTest\Asset\MockRoleWithPermissionTraversable;
+use PHPUnit\Framework\TestCase;
 use Rbac\Role\RoleInterface;
 use Laminas\Mvc\MvcEvent;
-use Laminas\Permissions\Rbac\Role;
 use LmcRbacMvc\Collector\RbacCollector;
 use LmcRbacMvc\Guard\GuardInterface;
 use LmcRbacMvc\Options\ModuleOptions;
 use LmcRbacMvc\Role\InMemoryRoleProvider;
 use LmcRbacMvc\Service\RoleService;
 use Rbac\Traversal\Strategy\RecursiveRoleIteratorStrategy;
-use LmcRbacMvcTest\Asset\MockRoleWithPermissionMethod;
-use LmcRbacMvcTest\Asset\MockRoleWithPermissionProperty;
+use LmcRbacMvcDevToolsTest\Asset\MockRoleWithPermissionMethod;
+use LmcRbacMvcDevToolsTest\Asset\MockRoleWithPermissionProperty;
 
 /**
- * @covers \LmcRbacMvc\Collector\RbacCollector
+ * @covers \LmcRbacMvcDevTools\Collector\RbacCollector
  */
-class RbacCollectorTest extends \PHPUnit\Framework\TestCase
+class RbacCollectorTest extends TestCase
 {
     public function testDefaultGetterReturnValues()
     {

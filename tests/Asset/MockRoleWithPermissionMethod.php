@@ -1,21 +1,21 @@
 <?php
 
-namespace LmcRbacMvcTest\Asset;
+namespace LmcRbacMvcDevToolsTest\Asset;
 
 use Rbac\Role\RoleInterface;
 
 class MockRoleWithPermissionMethod implements RoleInterface
 {
-    public function getPermissions()
+    public function getPermissions(): array
     {
         return ['permission-method-a', 'permission-method-b'];
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'role-with-permission-method';
     }
-    public function hasPermission($permission)
+    public function hasPermission($permission): bool
     {
         return false;
     }

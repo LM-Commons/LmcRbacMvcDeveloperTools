@@ -1,18 +1,18 @@
 <?php
 
-namespace LmcRbacMvcTest\Asset;
+namespace LmcRbacMvcDevToolsTest\Asset;
 
 use Rbac\Role\RoleInterface;
 
 class MockRoleWithPermissionProperty implements RoleInterface
 {
-    private $permissions = ['permission-property-a', 'permission-property-b'];
+    private array $permissions = ['permission-property-a', 'permission-property-b'];
 
-    public function getName()
+    public function getName(): string
     {
         return 'role-with-permission-property';
     }
-    public function hasPermission($permission)
+    public function hasPermission($permission): bool
     {
         return false;
     }
