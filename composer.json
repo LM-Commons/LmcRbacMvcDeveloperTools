@@ -44,6 +44,8 @@
     }
   },
   "scripts": {
-    "test": "phpunit"
+    "test": "phpunit",
+    "test-coverage": "phpunit --coverage-clover ./build/logs/clover.xml --exclude-group Functional",
+    "upload-coverage": "php-coveralls -v"
   }
 }
