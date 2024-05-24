@@ -18,9 +18,8 @@
 
 namespace LmcRbacMvcDevTools\Collector;
 
-use Rbac\Role\HierarchicalRoleInterface;
-use Rbac\Role\RoleInterface;
-use Rbac\Traversal\RecursiveRoleIterator;
+use Laminas\Permissions\Rbac\RoleInterface;
+use LmcRbacMvc\Role\RecursiveRoleIterator;
 use RecursiveIteratorIterator;
 use ReflectionProperty;
 use ReflectionException;
@@ -30,7 +29,7 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\DeveloperTools\Collector\CollectorInterface;
 use LmcRbacMvc\Options\ModuleOptions;
 use LmcRbacMvc\Service\RoleService;
-use LmcRbacMvc\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
  * RbacCollector
@@ -66,7 +65,7 @@ class RbacCollector implements CollectorInterface, Serializable
     /**
      * Collector Priority.
      *
-     * @return int
+     * @return integer
      */
     public function getPriority(): int
     {
@@ -142,7 +141,7 @@ class RbacCollector implements CollectorInterface, Serializable
         foreach ($identityRoles as $role) {
             $roleName = $role->getName();
 
-            if (!$role instanceof HierarchicalRoleInterface) {
+            if (empty($role->getChildren())) {
                 $this->collectedRoles[] = $roleName;
             } else {
                 $iteratorIterator = new RecursiveIteratorIterator(
@@ -214,7 +213,7 @@ class RbacCollector implements CollectorInterface, Serializable
     /**
      * {@inheritDoc}
      */
-    public function unserialize($data)
+    public function unserialize($data): void
     {
         $collection = unserialize($data);
         if (!is_array($collection)) {
