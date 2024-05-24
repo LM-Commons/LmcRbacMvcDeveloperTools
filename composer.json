@@ -38,6 +38,11 @@
       "LmcRbacMvcDevToolsTest\\": "tests/"
     }
   },
+  "extra": {
+    "laminas": {
+      "module": "LmcRbacMvcDevTools"
+    }
+  },
   "scripts": {
     "test": "phpunit"
   }

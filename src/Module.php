@@ -10,6 +10,11 @@ class Module implements \Laminas\ModuleManager\Feature\ConfigProviderInterface
      */
     public function getConfig()
     {
-        return include __DIR__ . '/../config/module.config.php';
+        $configProvider = new ConfigProvider();
+        return [
+            'service_manager' => $configProvider->getDependencies(),
+            'view_manager' => $configProvider->getViewManagerConfig(),
+            'laminas-developer-tools' => $configProvider->getLaminasDeveloperToolsConfig(),
+        ];
     }
 }
