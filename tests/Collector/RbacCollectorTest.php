@@ -23,7 +23,7 @@ use LmcRbacMvc\Identity\IdentityInterface;
 use LmcRbacMvcDevToolsTest\Asset\MockRoleWithPermissionTraversable;
 use Laminas\Permissions\Rbac\RoleInterface;
 use Laminas\Mvc\MvcEvent;
-use LmcRbacMvc\Collector\RbacCollector;
+use LmcRbacMvcDevTools\Collector\RbacCollector;
 use LmcRbacMvc\Guard\GuardInterface;
 use LmcRbacMvc\Options\ModuleOptions;
 use LmcRbacMvc\Role\InMemoryRoleProvider;
