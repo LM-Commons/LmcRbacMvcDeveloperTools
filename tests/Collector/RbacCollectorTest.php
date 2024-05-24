@@ -21,24 +21,23 @@ namespace LmcRbacMvcDevToolsTest\Collector;
 use Laminas\ServiceManager\ServiceManager;
 use LmcRbacMvc\Identity\IdentityInterface;
 use LmcRbacMvcDevToolsTest\Asset\MockRoleWithPermissionTraversable;
-use PHPUnit\Framework\TestCase;
-use Rbac\Role\RoleInterface;
+use Laminas\Permissions\Rbac\RoleInterface;
 use Laminas\Mvc\MvcEvent;
 use LmcRbacMvc\Collector\RbacCollector;
 use LmcRbacMvc\Guard\GuardInterface;
 use LmcRbacMvc\Options\ModuleOptions;
 use LmcRbacMvc\Role\InMemoryRoleProvider;
 use LmcRbacMvc\Service\RoleService;
-use Rbac\Traversal\Strategy\RecursiveRoleIteratorStrategy;
+use LmcRbacMvc\Role\RecursiveRoleIteratorStrategy;
 use LmcRbacMvcDevToolsTest\Asset\MockRoleWithPermissionMethod;
 use LmcRbacMvcDevToolsTest\Asset\MockRoleWithPermissionProperty;
 
 /**
  * @covers \LmcRbacMvcDevTools\Collector\RbacCollector
  */
-class RbacCollectorTest extends TestCase
+class RbacCollectorTest extends \PHPUnit\Framework\TestCase
 {
-    public function testDefaultGetterReturnValues()
+    public function testDefaultGetterReturnValues(): void
     {
         $collector = new RbacCollector();
 
@@ -84,7 +83,7 @@ class RbacCollectorTest extends TestCase
 
     public function testUnserializeThrowsInvalidArgumentException()
     {
-        $this->expectException('LmcRbacMvc\Exception\InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $collector    = new RbacCollector();
         $unserialized = 'not_an_array';
         $serialized   = serialize($unserialized);
@@ -128,7 +127,7 @@ class RbacCollectorTest extends TestCase
                     'permissions' => ['read']
                 ]
             ],
-            'identity_role' => 'member'
+            'identity_role' => ['member']
         ];
 
         //$serviceManager = $this->getMockBuilder('Laminas\ServiceManager\ServiceLocatorInterface')->getMock();
@@ -158,17 +157,6 @@ class RbacCollectorTest extends TestCase
 
         $roleService = new RoleService($identityProvider, new InMemoryRoleProvider($dataToCollect['role_config']), new RecursiveRoleIteratorStrategy());
 
-        /*
-        $serviceManager->expects($this->at(0))
-                       ->method('get')
-                       ->with('LmcRbacMvc\Service\RoleService')
-                       ->will($this->returnValue($roleService));
-
-        $serviceManager->expects($this->at(1))
-                       ->method('get')
-                       ->with('LmcRbacMvc\Options\ModuleOptions')
-                       ->will($this->returnValue(new ModuleOptions($dataToCollect['module_options'])));
-*/
         $serviceManager->setService('LmcRbacMvc\Service\RoleService', $roleService);
         $serviceManager->setService('LmcRbacMvc\Options\ModuleOptions', new ModuleOptions($dataToCollect['module_options']));
         $collector = new RbacCollector();
@@ -178,10 +166,6 @@ class RbacCollectorTest extends TestCase
         $collection = $collector->getCollection();
 
         $expectedCollection = [
-            'options' => [
-                'guest_role'        => 'guest',
-                'protection_policy' => 'allow'
-            ],
             'guards' => [
                 'LmcRbacMvc\Guard\RouteGuard' => [
                     'admin*' => ['*']
@@ -197,9 +181,13 @@ class RbacCollectorTest extends TestCase
                 'member' => ['guest']
             ],
             'permissions' => [
-                'member' => ['write', 'delete'],
+                'member' => ['write', 'delete', 'read'],
                 'guest'  => ['read']
-            ]
+            ],
+            'options' => [
+                'guest_role'        => 'guest',
+                'protection_policy' => 'allow'
+            ],
         ];
 
         $this->assertEquals($expectedCollection, $collection);
@@ -272,7 +260,7 @@ class RbacCollectorTest extends TestCase
     /**
      * Base method for the *collectPermissionProperty tests
      * @param RoleInterface $role
-     * @return array|\string[]
+     * @return array|string[]
      */
     private function collectPermissionsPropertyTestBase(RoleInterface $role)
     {
