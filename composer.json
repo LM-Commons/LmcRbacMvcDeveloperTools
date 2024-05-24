@@ -1,5 +1,5 @@
 {
-  "name": "lm-commons/lmc-rbac-mvc-dev-tools",
+  "name": "lm-commons/lmc-rbac-mvc-devtools",
   "description": "Developer Tools for LM-Commons/LmcRbacMvc",
   "type": "library",
   "license": "MIT",
@@ -19,7 +19,7 @@
     }
   ],
   "require": {
-    "php": "^8.1 | ^8.2",
+    "php": "^8.1 | ^8.2 | ^8.3",
     "laminas/laminas-mvc": "~3.0",
     "laminas/laminas-developer-tools": "~2.0",
     "lm-commons/lmc-rbac-mvc": "dev-4.x-dev"
