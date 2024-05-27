@@ -1,6 +1,6 @@
 <?php
 
-namespace LmcRbacMvcDevToolsTest\Asset;
+namespace LmcRbac\Mvc\DevToolsTest\Asset;
 
 use Laminas\Permissions\Rbac\RoleInterface;
 

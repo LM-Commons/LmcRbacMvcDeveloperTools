@@ -16,7 +16,7 @@
  * and is licensed under the MIT license.
  */
 
-namespace LmcRbacMvcDevToolsTest\Util;
+namespace LmcRbac\Mvc\DevToolsTest\Util;
 
 use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\Mvc\Service\ServiceManagerConfig;

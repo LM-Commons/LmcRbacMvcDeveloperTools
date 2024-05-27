@@ -17,7 +17,7 @@
  */
 
 use Laminas\Mvc\Application;
-use LmcRbacMvcDevToolsTest\Util\ServiceManagerFactory;
+use LmcRbac\Mvc\DevToolsTest\Util\ServiceManagerFactory;
 
 ini_set('error_reporting', E_ALL);
 
@@ -37,7 +37,7 @@ if (! isset($loader)) {
     throw new RuntimeException('vendor/autoload.php could not be found. Did you install via composer?');
 }
 
-$loader->add('LmcRbacMvcTest\\', __DIR__);
+$loader->add('LmcRbac\\Mvc\\DevToolsTest\\', __DIR__);
 
 $config = require __DIR__ . '/TestConfiguration.php';
 ServiceManagerFactory::setApplicationConfig($config);

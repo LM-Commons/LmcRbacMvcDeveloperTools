@@ -1,6 +1,6 @@
 <?php
 
-namespace LmcRbacMvcDevTools;
+namespace LmcRbac\Mvc\DevTools;
 
 class ConfigProvider
 {
@@ -17,7 +17,7 @@ class ConfigProvider
     {
         return [
             'factories' => [
-                \LmcRbacMvcDevTools\Collector\RbacCollector::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+                \LmcRbac\Mvc\DevTools\Collector\RbacCollector::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
             ],
         ];
     }
@@ -36,7 +36,7 @@ class ConfigProvider
         return [
             'profiler' => [
                 'collectors' => [
-                    'lmc_rbac' => \LmcRbacMvcDevTools\Collector\RbacCollector::class,
+                    'lmc_rbac' => \LmcRbac\Mvc\DevTools\Collector\RbacCollector::class,
                 ],
             ],
             'toolbar' => [

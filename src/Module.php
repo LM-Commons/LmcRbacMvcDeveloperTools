@@ -1,6 +1,6 @@
 <?php
 
-namespace LmcRbacMvcDevTools;
+namespace LmcRbac\Mvc\DevTools;
 
 class Module implements \Laminas\ModuleManager\Feature\ConfigProviderInterface
 {

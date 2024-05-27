@@ -32,17 +32,17 @@
   },
   "autoload": {
     "psr-4": {
-      "LmcRbacMvcDevTools\\": "src/"
+      "LmcRbac\\Mvc\\DevTools\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "LmcRbacMvcDevToolsTest\\": "tests/"
+      "LmcRbac\\Mvc\\DevToolsTest\\": "tests/"
     }
   },
   "extra": {
     "laminas": {
-      "module": "LmcRbacMvcDevTools"
+      "module": "LmcRbac\\Mvc\\DevTools"
     }
   },
   "scripts": {

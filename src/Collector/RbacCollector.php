@@ -16,7 +16,7 @@
  * and is licensed under the MIT license.
  */
 
-namespace LmcRbacMvcDevTools\Collector;
+namespace LmcRbac\Mvc\DevTools\Collector;
 
 use Laminas\Permissions\Rbac\RoleInterface;
 use LmcRbacMvc\Role\RecursiveRoleIterator;
