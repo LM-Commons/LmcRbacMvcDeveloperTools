@@ -21,7 +21,7 @@ Laminas MVC Developer Tools extension for [LmcRbacMvc](https://github.com/LM-Com
 Install via Composer, typically as a development component:
 
 ```shell
-$ composer require -dev lm-commons/lmc-rbac-mvc-devtools
+$ composer require --dev lm-commons/lmc-rbac-mvc-devtools
 ```
 
 Composer should ask to install the module. Typically, this module will
