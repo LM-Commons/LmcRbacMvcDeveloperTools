@@ -37,7 +37,7 @@ if (! isset($loader)) {
     throw new RuntimeException('vendor/autoload.php could not be found. Did you install via composer?');
 }
 
-$loader->add('LmcRbac\\Mvc\\DevToolsTest\\', __DIR__);
+//$loader->add('LmcRbac\\Mvc\\DevToolsTest\\', __DIR__);
 
 $config = require __DIR__ . '/TestConfiguration.php';
 ServiceManagerFactory::setApplicationConfig($config);

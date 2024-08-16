@@ -26,16 +26,15 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php_version: ${{matrix.php_version}}
+          php-version: ${{matrix.php_version}}
 
       - name: Show PHP version
         run: php -v
 
       - name: Checkout Branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Validate composer.json and composer.lock
-#        run: composer validate --strict
         run: composer validate
 
       - name: Cache Composer packages

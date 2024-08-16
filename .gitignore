@@ -1,6 +1,7 @@
 vendor
 build
 .phpunit*
+.phpcs*
 #ignoring PHPEclipse project files and directories
 /.settings
 /.project
