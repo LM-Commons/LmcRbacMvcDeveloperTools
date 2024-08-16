@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LmcRbac\Mvc\DevToolsTest\Asset;
 
+use Lmc\Rbac\Permission\PermissionInterface;
 use Lmc\Rbac\Role\RoleInterface;
 
 class MockRoleWithPermissionMethod implements RoleInterface
@@ -15,6 +18,7 @@ class MockRoleWithPermissionMethod implements RoleInterface
     {
         return 'role-with-permission-method';
     }
+
     public function hasPermission($permission): bool
     {
         return false;
@@ -23,9 +27,8 @@ class MockRoleWithPermissionMethod implements RoleInterface
     /**
      * Add permission to the role.
      */
-    public function addPermission(string|\Lmc\Rbac\Permission\PermissionInterface $permission): void
+    public function addPermission(string|PermissionInterface $permission): void
     {
-
     }
 
     /**
@@ -33,7 +36,6 @@ class MockRoleWithPermissionMethod implements RoleInterface
      */
     public function addChild(RoleInterface $role): void
     {
-
     }
 
     /**
@@ -46,7 +48,7 @@ class MockRoleWithPermissionMethod implements RoleInterface
         return [];
     }
 
-    public function hasChildren() : bool
+    public function hasChildren(): bool
     {
         return false;
     }

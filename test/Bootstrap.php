@@ -16,14 +16,13 @@
  * and is licensed under the MIT license.
  */
 
-use Laminas\Mvc\Application;
 use LmcRbac\Mvc\DevToolsTest\Util\ServiceManagerFactory;
 
 ini_set('error_reporting', E_ALL);
 
 $files = [
     __DIR__ . '/../vendor/autoload.php',
-    __DIR__ . '/../../../autoload.php'
+    __DIR__ . '/../../../autoload.php',
 ];
 
 foreach ($files as $file) {
@@ -37,8 +36,6 @@ if (! isset($loader)) {
     throw new RuntimeException('vendor/autoload.php could not be found. Did you install via composer?');
 }
 
-//$loader->add('LmcRbac\\Mvc\\DevToolsTest\\', __DIR__);
-
 $config = require __DIR__ . '/TestConfiguration.php';
 ServiceManagerFactory::setApplicationConfig($config);
-unset($files, $file, $loader, $configFiles, $configFile, $config);
+unset($files, $file, $loader, $config);

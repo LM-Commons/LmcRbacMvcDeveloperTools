@@ -97,7 +97,10 @@ class RbacCollector implements CollectorInterface, Serializable
      */
     private function collectOptions(ModuleOptions $moduleOptions): void
     {
-        $this->collectedOptions = ['guest_role' => $moduleOptions->getGuestRole(), 'protection_policy' => $moduleOptions->getProtectionPolicy()];
+        $this->collectedOptions = [
+            'guest_role'        => $moduleOptions->getGuestRole(),
+            'protection_policy' => $moduleOptions->getProtectionPolicy(),
+        ];
     }
 
     /**
@@ -126,7 +129,10 @@ class RbacCollector implements CollectorInterface, Serializable
             if (empty($role->getChildren())) {
                 $this->collectedRoles[] = $roleName;
             } else {
-                $iteratorIterator = new RecursiveIteratorIterator(new RecursiveRoleIterator($role->getChildren()), RecursiveIteratorIterator::SELF_FIRST);
+                $iteratorIterator = new RecursiveIteratorIterator(
+                    new RecursiveRoleIterator($role->getChildren()),
+                    RecursiveIteratorIterator::SELF_FIRST
+                );
                 foreach ($iteratorIterator as $childRole) {
                     $this->collectedRoles[$roleName][] = $childRole->getName();
                     $this->collectPermissions($childRole);
@@ -147,8 +153,8 @@ class RbacCollector implements CollectorInterface, Serializable
         if (method_exists($role, 'getPermissions')) {
             $permissions = $role->getPermissions();
         } else {
-                          $reflectionProperty = new ReflectionProperty($role, 'permissions');
-            $permissions                      = $reflectionProperty->getValue($role);
+            $reflectionProperty = new ReflectionProperty($role, 'permissions');
+            $permissions        = $reflectionProperty->getValue($role);
         }
 
         if ($permissions instanceof Traversable) {
@@ -166,13 +172,14 @@ class RbacCollector implements CollectorInterface, Serializable
      */
     public function getCollection(): array
     {
+        // Start collect all the data we need!
         return [
             'guards'      => $this->collectedGuards,
             'roles'       => $this->collectedRoles,
             'permissions' => $this->collectedPermissions,
             'options'     => $this->collectedOptions,
         ];
-    } // Start collect all the data we need!
+    }
 
  // Gather the permissions for the given role. We have to use reflection as
  // the RoleInterface does not have "getPermissions" method

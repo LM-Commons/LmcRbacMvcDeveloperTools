@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -17,14 +20,13 @@
  */
 
 return [
-    'modules' => [
-        'LmcRbacMvc',
+    'modules'                 => [
+        'Lmc\Rbac\Mvc',
     ],
     'module_listener_options' => [
         'config_glob_paths' => [
             __DIR__ . '/testing.config.php',
         ],
-        'module_paths' => [
-        ],
+        'module_paths'      => [],
     ],
 ];

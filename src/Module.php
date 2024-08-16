@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LmcRbac\Mvc\DevTools;
 
 class Module
 {
-
     public function getConfig(): array
     {
         $configProvider = new ConfigProvider();
         return [
-            'service_manager' => $configProvider->getDependencies(),
-            'view_manager' => $configProvider->getViewManagerConfig(),
+            'service_manager'         => $configProvider->getDependencies(),
+            'view_manager'            => $configProvider->getViewManagerConfig(),
             'laminas-developer-tools' => $configProvider->getLaminasDeveloperToolsConfig(),
         ];
     }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -16,65 +17,77 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace LmcRbac\Mvc\DevToolsTest\Collector;
 
+use Laminas\Mvc\Application;
+use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\ServiceManager;
 use Lmc\Rbac\Identity\IdentityInterface;
-use LmcRbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionTraversable;
-use Lmc\Rbac\Role\RoleInterface;
-use Laminas\Mvc\MvcEvent;
-use LmcRbac\Mvc\DevTools\Collector\RbacCollector;
+use Lmc\Rbac\Mvc\Guard\ControllerGuard;
 use Lmc\Rbac\Mvc\Guard\GuardInterface;
+use Lmc\Rbac\Mvc\Guard\RouteGuard;
+use Lmc\Rbac\Mvc\Identity\IdentityProviderInterface;
 use Lmc\Rbac\Mvc\Options\ModuleOptions;
-use Lmc\Rbac\Role\InMemoryRoleProvider;
-use Lmc\Rbac\Mvc\Service\RoleService;
 use Lmc\Rbac\Mvc\Role\RecursiveRoleIteratorStrategy;
+use Lmc\Rbac\Mvc\Service\RoleService;
+use Lmc\Rbac\Role\InMemoryRoleProvider;
+use Lmc\Rbac\Role\RoleInterface;
+use Lmc\Rbac\Role\RoleProviderInterface;
+use Lmc\Rbac\Service\RoleService as BaseRoleService;
+use LmcRbac\Mvc\DevTools\Collector\RbacCollector;
 use LmcRbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionMethod;
 use LmcRbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionProperty;
-use Lmc\Rbac\Service\RoleService as BaseRoleService;
+use LmcRbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionTraversable;
+use PHPUnit\Framework\TestCase;
+
+use function serialize;
+use function unserialize;
 
 /**
  * @covers \LmcRbac\Mvc\DevTools\Collector\RbacCollector
  */
-class RbacCollectorTest extends \PHPUnit\Framework\TestCase
+class RbacCollectorTest extends TestCase
 {
     public function testDefaultGetterReturnValues(): void
     {
         $collector = new RbacCollector();
-
         $this->assertSame(-100, $collector->getPriority());
         $this->assertSame('lmc_rbac', $collector->getName());
     }
 
-    public function testSerialize()
+    public function testSerialize(): void
     {
         $collector  = new RbacCollector();
         $serialized = $collector->serialize();
-
         $this->assertIsString($serialized);
-
         $unserialized = unserialize($serialized);
-
         $this->assertSame([], $unserialized['guards']);
         $this->assertSame([], $unserialized['roles']);
         $this->assertSame([], $unserialized['options']);
     }
 
-    public function testUnserialize()
+    public function testUnserialize(): vois
     {
         $collector    = new RbacCollector();
         $unserialized = [
-            'guards'      => ['foo' => 'bar'],
-            'roles'       => ['foo' => 'bar'],
-            'permissions' => ['foo' => 'bar'],
-            'options'     => ['foo' => 'bar']
+            'guards'      => [
+                'foo' => 'bar',
+            ],
+            'roles'       => [
+                'foo' => 'bar',
+            ],
+            'permissions' => [
+                'foo' => 'bar',
+            ],
+            'options'     => [
+                'foo' => 'bar',
+            ],
         ];
         $serialized   = serialize($unserialized);
-
         $collector->unserialize($serialized);
-
         $collection = $collector->getCollection();
-
         $this->assertIsArray($collection);
         $this->assertSame(['foo' => 'bar'], $collection['guards']);
         $this->assertSame(['foo' => 'bar'], $collection['roles']);
@@ -82,58 +95,54 @@ class RbacCollectorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['foo' => 'bar'], $collection['permissions']);
     }
 
-    public function testUnserializeThrowsInvalidArgumentException()
+    public function testUnserializeThrowsInvalidArgumentException(): void
     {
         $this->expectException('InvalidArgumentException');
         $collector    = new RbacCollector();
         $unserialized = 'not_an_array';
         $serialized   = serialize($unserialized);
-
         $collector->unserialize($serialized);
     }
 
-
-    public function testCollectNothingIfNoApplicationIsSet()
+    public function testCollectNothingIfNoApplicationIsSet(): void
     {
         $mvcEvent  = new MvcEvent();
         $collector = new RbacCollector();
-
         $this->assertNull($collector->collect($mvcEvent));
     }
 
-    public function testCanCollect()
+    public function testCanCollect(): void
     {
         $dataToCollect = [
             'module_options' => [
                 'guest_role'        => 'guest',
                 'protection_policy' => GuardInterface::POLICY_ALLOW,
                 'guards'            => [
-                    'Lmc\Rbac\Mvc\Guard\RouteGuard' => [
-                        'admin*' => ['*']
+                    RouteGuard::class      => [
+                        'admin*' => ['*'],
                     ],
-                    'Lmc\Rbac\Mvc\Guard\ControllerGuard' => [
+                    ControllerGuard::class => [
                         [
                             'controller' => 'Foo',
-                            'roles'      => ['*']
-                        ]
-                    ]
-                ]
+                            'roles'      => ['*'],
+                        ],
+                    ],
+                ],
             ],
-            'role_config' => [
+            'role_config'    => [
                 'member' => [
                     'children'    => ['guest'],
-                    'permissions' => ['write', 'delete']
+                    'permissions' => ['write', 'delete'],
                 ],
-                'guest' => [
-                    'permissions' => ['read']
-                ]
+                'guest'  => [
+                    'permissions' => ['read'],
+                ],
             ],
-            'identity_role' => ['member']
+            'identity_role'  => ['member'],
         ];
 
-        //$serviceManager = $this->getMockBuilder('Laminas\ServiceManager\ServiceLocatorInterface')->getMock();
         $serviceManager = new ServiceManager();
-        $application = $this->getMockBuilder('Laminas\Mvc\Application')
+        $application    = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -145,14 +154,14 @@ class RbacCollectorTest extends \PHPUnit\Framework\TestCase
         $identity = $this->createMock(IdentityInterface::class);
         $identity->expects($this->once())->method('getRoles')->willReturn($dataToCollect['identity_role']);
 
-        $identityProvider = $this->createMock(\Lmc\Rbac\Mvc\Identity\IdentityProviderInterface::class);
+        $identityProvider = $this->createMock(IdentityProviderInterface::class);
         $identityProvider->expects($this->once())->method('getIdentity')->willReturn($identity);
 
         $baseRoleService = new BaseRoleService(new InMemoryRoleProvider($dataToCollect['role_config']), 'guest');
-        $roleService = new RoleService($identityProvider, $baseRoleService, new RecursiveRoleIteratorStrategy());
+        $roleService     = new RoleService($identityProvider, $baseRoleService, new RecursiveRoleIteratorStrategy());
 
-        $serviceManager->setService('Lmc\Rbac\Mvc\Service\RoleService', $roleService);
-        $serviceManager->setService('Lmc\Rbac\Mvc\Options\ModuleOptions', new ModuleOptions($dataToCollect['module_options']));
+        $serviceManager->setService(RoleService::class, $roleService);
+        $serviceManager->setService(ModuleOptions::class, new ModuleOptions($dataToCollect['module_options']));
         $collector = new RbacCollector();
         $collector->collect($mvcEvent);
 
@@ -160,27 +169,27 @@ class RbacCollectorTest extends \PHPUnit\Framework\TestCase
         $collection = $collector->getCollection();
 
         $expectedCollection = [
-            'guards' => [
-                'Lmc\Rbac\Mvc\Guard\RouteGuard' => [
-                    'admin*' => ['*']
+            'guards'      => [
+                RouteGuard::class      => [
+                    'admin*' => ['*'],
                 ],
-                'Lmc\Rbac\Mvc\Guard\ControllerGuard' => [
+                ControllerGuard::class => [
                     [
                         'controller' => 'Foo',
-                        'roles'      => ['*']
-                    ]
-                ]
+                        'roles'      => ['*'],
+                    ],
+                ],
             ],
-            'roles'  => [
-                'member' => ['guest']
+            'roles'       => [
+                'member' => ['guest'],
             ],
             'permissions' => [
                 'member' => ['write', 'delete'],
-                'guest'  => ['read']
+                'guest'  => ['read'],
             ],
-            'options' => [
+            'options'     => [
                 'guest_role'        => 'guest',
-                'protection_policy' => 'allow'
+                'protection_policy' => 'allow',
             ],
         ];
 
@@ -190,16 +199,16 @@ class RbacCollectorTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests the collectPermissions method when the role has a $permissions Property
      */
-    public function testCollectPermissionsProperty()
+    public function testCollectPermissionsProperty(): void
     {
         $expectedCollection = [
-            'guards' => [],
-            'roles'  => ['role-with-permission-property'],
+            'guards'      => [],
+            'roles'       => ['role-with-permission-property'],
             'permissions' => [
                 'role-with-permission-property' => ['permission-property-a', 'permission-property-b'],
             ],
-            'options' => [
-                'guest_role' => 'guest',
+            'options'     => [
+                'guest_role'        => 'guest',
                 'protection_policy' => GuardInterface::POLICY_ALLOW,
             ],
         ];
@@ -211,16 +220,16 @@ class RbacCollectorTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests the collectPermissions method when the role has a getPermissions() method
      */
-    public function testCollectPermissionsMethod()
+    public function testCollectPermissionsMethod(): void
     {
         $expectedCollection = [
-            'guards' => [],
-            'roles'  => ['role-with-permission-method'],
+            'guards'      => [],
+            'roles'       => ['role-with-permission-method'],
             'permissions' => [
                 'role-with-permission-method' => ['permission-method-a', 'permission-method-b'],
             ],
-            'options' => [
-                'guest_role' => 'guest',
+            'options'     => [
+                'guest_role'        => 'guest',
                 'protection_policy' => GuardInterface::POLICY_ALLOW,
             ],
         ];
@@ -232,16 +241,16 @@ class RbacCollectorTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests the collectPermissions method when the role implements Traversable
      */
-    public function testCollectPermissionsTraversable()
+    public function testCollectPermissionsTraversable(): void
     {
         $expectedCollection = [
-            'guards' => [],
-            'roles'  => ['role-with-permission-traversable'],
+            'guards'      => [],
+            'roles'       => ['role-with-permission-traversable'],
             'permissions' => [
                 'role-with-permission-traversable' => ['permission-method-a', 'permission-method-b'],
             ],
-            'options' => [
-                'guest_role' => 'guest',
+            'options'     => [
+                'guest_role'        => 'guest',
                 'protection_policy' => GuardInterface::POLICY_ALLOW,
             ],
         ];
@@ -250,17 +259,16 @@ class RbacCollectorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedCollection, $collection);
     }
 
-
     /**
      * Base method for the *collectPermissionProperty tests
-     * @param RoleInterface $role
+     *
      * @return array|string[]
      */
     private function collectPermissionsPropertyTestBase(RoleInterface $role): array
     {
         $serviceManager = new ServiceManager();
 
-        $application = $this->getMockBuilder(\Laminas\Mvc\Application::class)
+        $application = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
             ->getMock();
         $application->expects($this->once())->method('getServiceManager')->willReturn($serviceManager);
@@ -268,17 +276,17 @@ class RbacCollectorTest extends \PHPUnit\Framework\TestCase
         $mvcEvent = new MvcEvent();
         $mvcEvent->setApplication($application);
 
-        $identity = $this->createMock(\Lmc\Rbac\Identity\IdentityInterface::class);
+        $identity = $this->createMock(IdentityInterface::class);
         $identity->expects($this->once())
             ->method('getRoles')
             ->willReturn([$role]);
 
-        $identityProvider = $this->createMock(\Lmc\Rbac\Mvc\Identity\IdentityProviderInterface::class);
+        $identityProvider = $this->createMock(IdentityProviderInterface::class);
         $identityProvider->expects($this->once())
             ->method('getIdentity')
             ->will($this->returnValue($identity));
 
-        $roleProvider = $this->createMock(\Lmc\Rbac\Role\RoleProviderInterface::class);
+        $roleProvider = $this->createMock(RoleProviderInterface::class);
 
         $baseRoleService = new BaseRoleService($roleProvider, '');
 
@@ -287,8 +295,8 @@ class RbacCollectorTest extends \PHPUnit\Framework\TestCase
             $baseRoleService,
             new RecursiveRoleIteratorStrategy()
         );
-        $serviceManager->setService('Lmc\Rbac\Mvc\Service\RoleService', $roleService);
-        $serviceManager->setService('Lmc\Rbac\Mvc\Options\ModuleOptions', new ModuleOptions());
+        $serviceManager->setService(RoleService::class, $roleService);
+        $serviceManager->setService(ModuleOptions::class, new ModuleOptions());
         $collector = new RbacCollector();
         $collector->collect($mvcEvent);
 

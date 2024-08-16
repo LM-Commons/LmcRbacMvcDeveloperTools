@@ -1,14 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LmcRbac\Mvc\DevTools;
+
+use Laminas\ServiceManager\Factory\InvokableFactory;
+use LmcRbac\Mvc\DevTools\Collector\RbacCollector;
 
 class ConfigProvider
 {
     public function __invoke(): array
     {
         return [
-            'dependencies' => $this->getDependencies(),
-            'view_manager' => $this->getViewManagerConfig(),
+            'dependencies'            => $this->getDependencies(),
+            'view_manager'            => $this->getViewManagerConfig(),
             'laminas-developer-tools' => $this->getLaminasDeveloperToolsConfig(),
         ];
     }
@@ -17,7 +22,7 @@ class ConfigProvider
     {
         return [
             'factories' => [
-                \LmcRbac\Mvc\DevTools\Collector\RbacCollector::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+                RbacCollector::class => InvokableFactory::class,
             ],
         ];
     }
@@ -26,8 +31,8 @@ class ConfigProvider
     {
         return [
             'template_map' => [
-                'laminas-developer-tools/toolbar/lmc-rbac' => __DIR__ . '/../view/laminas-developer-tools/toolbar/lmc-rbac.phtml'
-            ]
+                'laminas-developer-tools/toolbar/lmc-rbac' => __DIR__ . '/../view/laminas-developer-tools/toolbar/lmc-rbac.phtml',
+            ],
         ];
     }
 
@@ -36,10 +41,10 @@ class ConfigProvider
         return [
             'profiler' => [
                 'collectors' => [
-                    'lmc_rbac' => \LmcRbac\Mvc\DevTools\Collector\RbacCollector::class,
+                    'lmc_rbac' => RbacCollector::class,
                 ],
             ],
-            'toolbar' => [
+            'toolbar'  => [
                 'entries' => [
                     'lmc_rbac' => 'laminas-developer-tools/toolbar/lmc-rbac',
                 ],
