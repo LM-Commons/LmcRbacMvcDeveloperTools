@@ -2,7 +2,7 @@
 
 namespace LmcRbac\Mvc\DevToolsTest\Asset;
 
-use Laminas\Permissions\Rbac\RoleInterface;
+use Lmc\Rbac\Role\RoleInterface;
 
 class MockRoleWithPermissionProperty implements RoleInterface
 {
@@ -13,19 +13,19 @@ class MockRoleWithPermissionProperty implements RoleInterface
         return 'role-with-permission-property';
     }
 
-    public function hasPermission($name): bool
+    public function hasPermission($permission): bool
     {
         return false;
     }
 
-    public function addPermission(string $name): void{
+    public function addPermission(string|\Lmc\Rbac\Permission\PermissionInterface $permission): void{
         return;
     }
 
     /**
      * Add a child.
      */
-    public function addChild(RoleInterface $child): void{
+    public function addChild(RoleInterface $role): void{
         return;
     }
 
@@ -39,26 +39,10 @@ class MockRoleWithPermissionProperty implements RoleInterface
     }
 
     /**
-     * Add a parent.
-     */
-    public function addParent(RoleInterface $parent): void{
-        return;
-    }
-
-    /**
-     * Get the parent roles.
-     *
-     * @return RoleInterface[]
-     */
-    public function getParents(): iterable{
-        return [];
-    }
-
-    /**
      * Get the children roles.
      *
-     * @return RoleInterface[]
      */
-    public function hasChildren(): iterable{
-        return [];
+    public function hasChildren(): bool
+    {
+        return false;
     }}

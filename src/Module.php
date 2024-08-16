@@ -2,13 +2,10 @@
 
 namespace LmcRbac\Mvc\DevTools;
 
-class Module implements \Laminas\ModuleManager\Feature\ConfigProviderInterface
+class Module
 {
 
-    /**
-     * @inheritDoc
-     */
-    public function getConfig()
+    public function getConfig(): array
     {
         $configProvider = new ConfigProvider();
         return [

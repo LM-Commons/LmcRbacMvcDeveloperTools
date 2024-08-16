@@ -18,7 +18,7 @@
 
 namespace LmcRbac\Mvc\DevTools\Collector;
 
-use Laminas\Permissions\Rbac\RoleInterface;
+use Lmc\Rbac\Role\RoleInterface;
 use LmcRbacMvc\Role\RecursiveRoleIterator;
 use RecursiveIteratorIterator;
 use ReflectionProperty;
@@ -174,7 +174,6 @@ class RbacCollector implements CollectorInterface, Serializable
             // Gather the permissions for the given role. We have to use reflection as
             // the RoleInterface does not have "getPermissions" method
             $reflectionProperty = new ReflectionProperty($role, 'permissions');
-            $reflectionProperty->setAccessible(true);
 
             $permissions = $reflectionProperty->getValue($role);
         }
