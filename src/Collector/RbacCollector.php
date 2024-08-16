@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -18,45 +21,43 @@
 
 namespace LmcRbac\Mvc\DevTools\Collector;
 
+use InvalidArgumentException;
+use Laminas\DeveloperTools\Collector\CollectorInterface;
+use Laminas\Mvc\MvcEvent;
+use Lmc\Rbac\Mvc\Options\ModuleOptions;
+use Lmc\Rbac\Mvc\Role\RecursiveRoleIterator;
+use Lmc\Rbac\Mvc\Service\RoleService;
 use Lmc\Rbac\Role\RoleInterface;
-use LmcRbacMvc\Role\RecursiveRoleIterator;
 use RecursiveIteratorIterator;
-use ReflectionProperty;
 use ReflectionException;
+use ReflectionProperty;
 use Serializable;
 use Traversable;
-use Laminas\Mvc\MvcEvent;
-use Laminas\DeveloperTools\Collector\CollectorInterface;
-use LmcRbacMvc\Options\ModuleOptions;
-use LmcRbacMvc\Service\RoleService;
-use InvalidArgumentException;
+
+use function array_values;
+use function array_walk;
+use function is_array;
+use function iterator_to_array;
+use function method_exists;
+use function serialize;
+use function unserialize;
 
 /**
  * RbacCollector
- *
- * @author  Michaël Gallego <mic.gallego@gmail.com>
- * @license MIT
  */
 class RbacCollector implements CollectorInterface, Serializable
 {
     /**
      * Collector priority
      */
-    const PRIORITY = -100;
-
-    protected array $collectedGuards = [];
-
-    protected array $collectedRoles = [];
-
+    const PRIORITY                        = -100;
+    protected array $collectedGuards      = [];
+    protected array $collectedRoles       = [];
     protected array $collectedPermissions = [];
-
-    protected array $collectedOptions = [];
-
-    /**
-     * Collector Name.
-     *
-     * @return string
-     */
+    protected array $collectedOptions     = [];
+/**
+ * Collector Name.
+ */
     public function getName(): string
     {
         return 'lmc_rbac';
@@ -64,8 +65,6 @@ class RbacCollector implements CollectorInterface, Serializable
 
     /**
      * Collector Priority.
-     *
-     * @return integer
      */
     public function getPriority(): int
     {
@@ -75,53 +74,40 @@ class RbacCollector implements CollectorInterface, Serializable
     /**
      * Collects data.
      *
-     * @param MvcEvent $mvcEvent
      * @throws ReflectionException
      */
     public function collect(MvcEvent $mvcEvent): void
     {
-        if (!$application = $mvcEvent->getApplication()) {
+        if (! $application = $mvcEvent->getApplication()) {
             return;
         }
 
         $serviceManager = $application->getServiceManager();
-
-        /* @var RoleService $roleService */
-        $roleService = $serviceManager->get('LmcRbacMvc\Service\RoleService');
-
-        /* @var ModuleOptions $options */
-        $options = $serviceManager->get('LmcRbacMvc\Options\ModuleOptions');
-
-        // Start collect all the data we need!
-        $this->collectOptions($options);
+/** @var RoleService $roleService */
+        $roleService = $serviceManager->get(RoleService::class);
+/** @var ModuleOptions $options */
+        $options = $serviceManager->get(ModuleOptions::class);
+         $this->collectOptions($options);
         $this->collectGuards($options->getGuards());
         $this->collectIdentityRolesAndPermissions($roleService);
     }
 
     /**
      * Collect options
-     *
-     * @param  ModuleOptions $moduleOptions
-     * @return void
      */
     private function collectOptions(ModuleOptions $moduleOptions): void
     {
-        $this->collectedOptions = [
-            'guest_role'        => $moduleOptions->getGuestRole(),
-            'protection_policy' => $moduleOptions->getProtectionPolicy()
-        ];
+        $this->collectedOptions = ['guest_role' => $moduleOptions->getGuestRole(), 'protection_policy' => $moduleOptions->getProtectionPolicy()];
     }
 
     /**
      * Collect guards
      *
      * @param array $guards
-     * @return void
      */
     private function collectGuards(array $guards): void
     {
         $this->collectedGuards = [];
-
         foreach ($guards as $type => $rules) {
             $this->collectedGuards[$type] = $rules;
         }
@@ -130,25 +116,17 @@ class RbacCollector implements CollectorInterface, Serializable
     /**
      * Collect roles and permissions
      *
-     * @param RoleService $roleService
-     * @return void
      * @throws ReflectionException
      */
     private function collectIdentityRolesAndPermissions(RoleService $roleService): void
     {
         $identityRoles = $roleService->getIdentityRoles();
-
         foreach ($identityRoles as $role) {
             $roleName = $role->getName();
-
             if (empty($role->getChildren())) {
                 $this->collectedRoles[] = $roleName;
             } else {
-                $iteratorIterator = new RecursiveIteratorIterator(
-                    new RecursiveRoleIterator($role->getChildren()),
-                    RecursiveIteratorIterator::SELF_FIRST
-                );
-
+                $iteratorIterator = new RecursiveIteratorIterator(new RecursiveRoleIterator($role->getChildren()), RecursiveIteratorIterator::SELF_FIRST);
                 foreach ($iteratorIterator as $childRole) {
                     $this->collectedRoles[$roleName][] = $childRole->getName();
                     $this->collectPermissions($childRole);
@@ -162,8 +140,6 @@ class RbacCollector implements CollectorInterface, Serializable
     /**
      * Collect permissions for the given role
      *
-     * @param RoleInterface $role
-     * @return void
      * @throws ReflectionException
      */
     private function collectPermissions(RoleInterface $role): void
@@ -171,11 +147,8 @@ class RbacCollector implements CollectorInterface, Serializable
         if (method_exists($role, 'getPermissions')) {
             $permissions = $role->getPermissions();
         } else {
-            // Gather the permissions for the given role. We have to use reflection as
-            // the RoleInterface does not have "getPermissions" method
-            $reflectionProperty = new ReflectionProperty($role, 'permissions');
-
-            $permissions = $reflectionProperty->getValue($role);
+                          $reflectionProperty = new ReflectionProperty($role, 'permissions');
+            $permissions                      = $reflectionProperty->getValue($role);
         }
 
         if ($permissions instanceof Traversable) {
@@ -185,7 +158,6 @@ class RbacCollector implements CollectorInterface, Serializable
         array_walk($permissions, function (&$permission) {
             $permission = (string) $permission;
         });
-
         $this->collectedPermissions[$role->getName()] = array_values($permissions);
     }
 
@@ -198,9 +170,13 @@ class RbacCollector implements CollectorInterface, Serializable
             'guards'      => $this->collectedGuards,
             'roles'       => $this->collectedRoles,
             'permissions' => $this->collectedPermissions,
-            'options'     => $this->collectedOptions
+            'options'     => $this->collectedOptions,
         ];
-    }
+    } // Start collect all the data we need!
+
+ // Gather the permissions for the given role. We have to use reflection as
+ // the RoleInterface does not have "getPermissions" method
+
     /**
      * {@inheritDoc}
      */
@@ -215,7 +191,7 @@ class RbacCollector implements CollectorInterface, Serializable
     public function unserialize($data): void
     {
         $collection = unserialize($data);
-        if (!is_array($collection)) {
+        if (! is_array($collection)) {
             throw new InvalidArgumentException(__METHOD__ . ": Unserialized data should be an array.");
         }
 
@@ -229,9 +205,9 @@ class RbacCollector implements CollectorInterface, Serializable
 
     public function __unserialize(array $data): void
     {
-        $this->collectedGuards = $data['guards'];
-        $this->collectedRoles  = $data['roles'];
-        $this->collectedPermissions =  $data['permissions'];
-        $this->collectedOptions = $data['options'];
+        $this->collectedGuards      = $data['guards'];
+        $this->collectedRoles       = $data['roles'];
+        $this->collectedPermissions = $data['permissions'];
+        $this->collectedOptions     = $data['options'];
     }
 }

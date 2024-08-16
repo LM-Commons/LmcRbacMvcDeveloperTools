@@ -1416,12 +1416,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LM-Commons/LmcRbacMvc.git",
-                "reference": "eb68b0860aa889070c4397b55620d8a43ef743a7"
+                "reference": "5e550b55f6ccb9fd980aa0c8ca6351d4c837d066"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LM-Commons/LmcRbacMvc/zipball/eb68b0860aa889070c4397b55620d8a43ef743a7",
-                "reference": "eb68b0860aa889070c4397b55620d8a43ef743a7",
+                "url": "https://api.github.com/repos/LM-Commons/LmcRbacMvc/zipball/5e550b55f6ccb9fd980aa0c8ca6351d4c837d066",
+                "reference": "5e550b55f6ccb9fd980aa0c8ca6351d4c837d066",
                 "shasum": ""
             },
             "require": {
@@ -1446,12 +1446,13 @@
             "type": "library",
             "extra": {
                 "laminas": {
-                    "module": "LmcRbacMvc"
+                    "module": "Lmc\\Rbac\\Mvc",
+                    "config-provider": "Lmc\\Rbac\\Mvc\\ConfigProvider"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "LmcRbacMvc\\": "src"
+                    "Lmc\\Rbac\\Mvc\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1490,7 +1491,7 @@
                 "issues": "https://github.com/LM-Commons/LmcRbacMvc/issues",
                 "source": "https://github.com/LM-Commons/LmcRbacMvc/tree/4.0.x"
             },
-            "time": "2024-08-16T17:34:09+00:00"
+            "time": "2024-08-16T20:37:07+00:00"
         },
         {
             "name": "nikic/php-parser",
