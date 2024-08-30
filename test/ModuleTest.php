@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace LmcRbac\Mvc\DevToolsTest;
+namespace LmcTest\Rbac\Mvc\DevToolsTest;
 
-use LmcRbac\Mvc\DevTools\ConfigProvider;
-use LmcRbac\Mvc\DevTools\Module;
+use Lmc\Rbac\Mvc\DevTools\ConfigProvider;
+use Lmc\Rbac\Mvc\DevTools\Module;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LmcRbac\Mvc\DevTools\Module
+ * @covers \Lmc\Rbac\Mvc\DevTools\Module
  */
 class ModuleTest extends TestCase
 {

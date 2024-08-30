@@ -19,9 +19,10 @@
 
 declare(strict_types=1);
 
-namespace LmcRbac\Mvc\DevToolsTest\Collector;
+namespace LmcTest\Rbac\Mvc\DevToolsTest\Collector;
 
 use Laminas\Mvc\Application;
+use Laminas\Mvc\ApplicationInterface;
 use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\ServiceManager;
 use Lmc\Rbac\Identity\IdentityInterface;
@@ -33,20 +34,20 @@ use Lmc\Rbac\Mvc\Options\ModuleOptions;
 use Lmc\Rbac\Mvc\Role\RecursiveRoleIteratorStrategy;
 use Lmc\Rbac\Mvc\Service\RoleService;
 use Lmc\Rbac\Role\InMemoryRoleProvider;
-use Lmc\Rbac\Role\RoleInterface;
+use Laminas\Permissions\Rbac\RoleInterface;
 use Lmc\Rbac\Role\RoleProviderInterface;
 use Lmc\Rbac\Service\RoleService as BaseRoleService;
-use LmcRbac\Mvc\DevTools\Collector\RbacCollector;
-use LmcRbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionMethod;
-use LmcRbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionProperty;
-use LmcRbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionTraversable;
+use Lmc\Rbac\Mvc\DevTools\Collector\RbacCollector;
+use LmcTest\Rbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionMethod;
+use LmcTest\Rbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionProperty;
+use LmcTest\Rbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionTraversable;
 use PHPUnit\Framework\TestCase;
 
 use function serialize;
 use function unserialize;
 
 /**
- * @covers \LmcRbac\Mvc\DevTools\Collector\RbacCollector
+ * @covers \Lmc\Rbac\Mvc\DevTools\Collector\RbacCollector
  */
 class RbacCollectorTest extends TestCase
 {
@@ -68,7 +69,7 @@ class RbacCollectorTest extends TestCase
         $this->assertSame([], $unserialized['options']);
     }
 
-    public function testUnserialize(): vois
+    public function testUnserialize(): void
     {
         $collector    = new RbacCollector();
         $unserialized = [
@@ -108,7 +109,15 @@ class RbacCollectorTest extends TestCase
     {
         $mvcEvent  = new MvcEvent();
         $collector = new RbacCollector();
-        $this->assertNull($collector->collect($mvcEvent));
+        $collector->collect($mvcEvent);
+        $expectedCollection = [
+            'guards' => [],
+            'roles' => [],
+            'permissions' => [],
+            'options' => [],
+        ];
+        $test = $collector->getCollection();
+        $this->assertEquals($expectedCollection, $collector->getCollection());
     }
 
     public function testCanCollect(): void
@@ -142,10 +151,7 @@ class RbacCollectorTest extends TestCase
         ];
 
         $serviceManager = new ServiceManager();
-        $application    = $this->getMockBuilder(Application::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $application    = $this->createMock('Laminas\Mvc\ApplicationInterface');
         $application->expects($this->once())->method('getServiceManager')->willReturn($serviceManager);
 
         $mvcEvent = new MvcEvent();
@@ -184,7 +190,7 @@ class RbacCollectorTest extends TestCase
                 'member' => ['guest'],
             ],
             'permissions' => [
-                'member' => ['write', 'delete'],
+                'member' => ['write', 'delete', 'read'],
                 'guest'  => ['read'],
             ],
             'options'     => [
@@ -284,7 +290,7 @@ class RbacCollectorTest extends TestCase
         $identityProvider = $this->createMock(IdentityProviderInterface::class);
         $identityProvider->expects($this->once())
             ->method('getIdentity')
-            ->will($this->returnValue($identity));
+            ->willReturn($identity);
 
         $roleProvider = $this->createMock(RoleProviderInterface::class);
 

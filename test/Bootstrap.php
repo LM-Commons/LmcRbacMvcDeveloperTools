@@ -16,13 +16,12 @@
  * and is licensed under the MIT license.
  */
 
-use LmcRbac\Mvc\DevToolsTest\Util\ServiceManagerFactory;
+use LmcTest\Rbac\Mvc\DevToolsTest\Util\ServiceManagerFactory;
 
 ini_set('error_reporting', E_ALL);
 
 $files = [
     __DIR__ . '/../vendor/autoload.php',
-    __DIR__ . '/../../../autoload.php',
 ];
 
 foreach ($files as $file) {

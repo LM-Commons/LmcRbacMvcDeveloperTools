@@ -19,7 +19,7 @@
 
 declare(strict_types=1);
 
-namespace LmcRbac\Mvc\DevToolsTest\Util;
+namespace LmcTest\Rbac\Mvc\DevToolsTest\Util;
 
 use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\Mvc\Service\ServiceManagerConfig;

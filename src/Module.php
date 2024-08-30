@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LmcRbac\Mvc\DevTools;
+namespace Lmc\Rbac\Mvc\DevTools;
 
 class Module
 {

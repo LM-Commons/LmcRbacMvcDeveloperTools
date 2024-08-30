@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace LmcRbac\Mvc\DevToolsTest;
+namespace LmcTest\Rbac\Mvc\DevToolsTest;
 
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use LmcRbac\Mvc\DevTools\Collector\RbacCollector;
-use LmcRbac\Mvc\DevTools\ConfigProvider;
+use Lmc\Rbac\Mvc\DevTools\Collector\RbacCollector;
+use Lmc\Rbac\Mvc\DevTools\ConfigProvider;
 use PHPUnit\Framework\TestCase;
 
 use function realpath;
 
 /**
- * @covers \LmcRbac\Mvc\DevTools\ConfigProvider
+ * @covers \Lmc\Rbac\Mvc\DevTools\ConfigProvider
  */
 class ConfigProviderTest extends TestCase
 {

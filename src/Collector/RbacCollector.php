@@ -19,7 +19,7 @@ declare(strict_types=1);
  * and is licensed under the MIT license.
  */
 
-namespace LmcRbac\Mvc\DevTools\Collector;
+namespace Lmc\Rbac\Mvc\DevTools\Collector;
 
 use InvalidArgumentException;
 use Laminas\DeveloperTools\Collector\CollectorInterface;
@@ -27,7 +27,7 @@ use Laminas\Mvc\MvcEvent;
 use Lmc\Rbac\Mvc\Options\ModuleOptions;
 use Lmc\Rbac\Mvc\Role\RecursiveRoleIterator;
 use Lmc\Rbac\Mvc\Service\RoleService;
-use Lmc\Rbac\Role\RoleInterface;
+use Laminas\Permissions\Rbac\RoleInterface;
 use RecursiveIteratorIterator;
 use ReflectionException;
 use ReflectionProperty;

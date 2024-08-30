@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LmcRbac\Mvc\DevTools;
+namespace Lmc\Rbac\Mvc\DevTools;
 
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use LmcRbac\Mvc\DevTools\Collector\RbacCollector;
+use Lmc\Rbac\Mvc\DevTools\Collector\RbacCollector;
 
 class ConfigProvider
 {
