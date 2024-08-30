@@ -187,7 +187,8 @@ class RbacCollectorTest extends TestCase
                 ],
             ],
             'roles'       => [
-                'member' => ['guest'],
+                'member', 'guest',
+//                'member' => ['guest'],
             ],
             'permissions' => [
                 'member' => ['write', 'delete', 'read'],

@@ -124,8 +124,15 @@ class RbacCollector implements CollectorInterface, Serializable
     private function collectIdentityRolesAndPermissions(RoleService $roleService): void
     {
         $identityRoles = $roleService->getIdentityRoles();
-        foreach ($identityRoles as $role) {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveRoleIterator($identityRoles),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+        foreach ($iterator as $role) {
             $roleName = $role->getName();
+            $this->collectedRoles[] = $roleName;
+            $this->collectPermissions($role);
+            /*
             if (empty($role->getChildren())) {
                 $this->collectedRoles[] = $roleName;
             } else {
@@ -140,6 +147,7 @@ class RbacCollector implements CollectorInterface, Serializable
             }
 
             $this->collectPermissions($role);
+            */
         }
     }
 

@@ -64,15 +64,5 @@
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
     }
-  },
-  "repositories": [
-    {
-      "type": "path",
-      "url": "../LmcRbacMvc"
-    },
-    {
-      "type": "path",
-      "url": "../LmcRbac"
-    }
-  ]
+  }
 }
