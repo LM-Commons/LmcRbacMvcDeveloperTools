@@ -1,36 +1,38 @@
 <?php
 
+declare(strict_types=1);
 
-namespace LmcRbac\Mvc\DevToolsTest\Asset;
+namespace LmcTest\Rbac\Mvc\DevToolsTest\Asset;
 
-use Lmc\Rbac\Role\RoleInterface;
-
+use ArrayObject;
+use Laminas\Permissions\Rbac\RoleInterface;
 
 class MockRoleWithPermissionTraversable implements RoleInterface
 {
-    public function getPermissions(): \ArrayObject
+    public function getPermissions(): ArrayObject
     {
-        return new \ArrayObject(['permission-method-a', 'permission-method-b']);
+        return new ArrayObject(['permission-method-a', 'permission-method-b']);
     }
 
     public function getName(): string
     {
         return 'role-with-permission-traversable';
     }
-    public function hasPermission($permission): bool
+
+    public function hasPermission(string $name): bool
     {
         return false;
     }
 
-    public function addPermission(string|\Lmc\Rbac\Permission\PermissionInterface $permission): void{
-        return;
+    public function addPermission(string $name): void
+    {
     }
 
     /**
      * Add a child.
      */
-    public function addChild(RoleInterface $role): void{
-        return;
+    public function addChild(RoleInterface $child): void
+    {
     }
 
     /**
@@ -38,17 +40,25 @@ class MockRoleWithPermissionTraversable implements RoleInterface
      *
      * @return RoleInterface[]
      */
-    public function getChildren(): iterable{
+    public function getChildren(): iterable
+    {
         return [];
     }
 
     /**
      * Get the children roles.
-     *
-     * @return bool
      */
     public function hasChildren(): bool
     {
         return false;
+    }
+
+    public function addParent(RoleInterface $parent): void
+    {
+    }
+
+    public function getParents(): iterable
+    {
+        return [];
     }
 }

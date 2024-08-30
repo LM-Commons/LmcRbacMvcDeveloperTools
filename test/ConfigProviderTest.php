@@ -1,36 +1,42 @@
 <?php
 
-namespace LmcRbac\Mvc\DevToolsTest;
+declare(strict_types=1);
 
-use LmcRbac\Mvc\DevTools\ConfigProvider;
+namespace LmcTest\Rbac\Mvc\DevToolsTest;
+
+use Laminas\ServiceManager\Factory\InvokableFactory;
+use Lmc\Rbac\Mvc\DevTools\Collector\RbacCollector;
+use Lmc\Rbac\Mvc\DevTools\ConfigProvider;
 use PHPUnit\Framework\TestCase;
 
+use function realpath;
+
 /**
- * @covers \LmcRbac\Mvc\DevTools\ConfigProvider
+ * @covers \Lmc\Rbac\Mvc\DevTools\ConfigProvider
  */
 class ConfigProviderTest extends TestCase
 {
     public function testProvidesExpectedConfig()
     {
-        $provider = new ConfigProvider();
-        $expectedDependencyConfig = [
+        $provider                      = new ConfigProvider();
+        $expectedDependencyConfig      = [
             'factories' => [
-                \LmcRbac\Mvc\DevTools\Collector\RbacCollector::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+                RbacCollector::class => InvokableFactory::class,
             ],
         ];
         $expectedLaminasDevtoolsConfig = [
             'profiler' => [
                 'collectors' => [
-                    'lmc_rbac' => \LmcRbac\Mvc\DevTools\Collector\RbacCollector::class,
+                    'lmc_rbac' => RbacCollector::class,
                 ],
             ],
-            'toolbar' => [
+            'toolbar'  => [
                 'entries' => [
                     'lmc_rbac' => 'laminas-developer-tools/toolbar/lmc-rbac',
                 ],
             ],
         ];
-        $expectedViewManagerConfig = [
+        $expectedViewManagerConfig     = [
             'template_map' => [
                 'laminas-developer-tools/toolbar/lmc-rbac' => realpath(__DIR__ . '/../view/laminas-developer-tools/toolbar/lmc-rbac.phtml'),
             ],
@@ -43,14 +49,14 @@ class ConfigProviderTest extends TestCase
                 'laminas-developer-tools/toolbar/lmc-rbac' => realpath(__DIR__ . '/../view/laminas-developer-tools/toolbar/lmc-rbac.phtml'),
             ],
         ];
-        $result = $provider->getViewManagerConfig();
+        $result                    = $provider->getViewManagerConfig();
         // substitute path
         $result['template_map']['laminas-developer-tools/toolbar/lmc-rbac'] = realpath($result['template_map']['laminas-developer-tools/toolbar/lmc-rbac']);
         $this->assertEquals($expectedViewManagerConfig, $result);
 
         $expectedConfig = [
-            'dependencies' => $expectedDependencyConfig,
-            'view_manager' => $expectedViewManagerConfig,
+            'dependencies'            => $expectedDependencyConfig,
+            'view_manager'            => $expectedViewManagerConfig,
             'laminas-developer-tools' => $expectedLaminasDevtoolsConfig,
         ];
 
