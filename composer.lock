@@ -1557,16 +1557,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.19.1",
+            "version": "v4.19.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "4e1b88d21c69391150ace211e9eaf05810858d0b"
+                "reference": "715f4d25e225bc47b293a8b997fe6ce99bf987d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4e1b88d21c69391150ace211e9eaf05810858d0b",
-                "reference": "4e1b88d21c69391150ace211e9eaf05810858d0b",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/715f4d25e225bc47b293a8b997fe6ce99bf987d2",
+                "reference": "715f4d25e225bc47b293a8b997fe6ce99bf987d2",
                 "shasum": ""
             },
             "require": {
@@ -1575,7 +1575,7 @@
             },
             "require-dev": {
                 "ircmaxell/php-yacc": "^0.0.7",
-                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
             },
             "bin": [
                 "bin/php-parse"
@@ -1607,9 +1607,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.19.1"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.19.4"
             },
-            "time": "2024-03-17T08:10:35+00:00"
+            "time": "2024-09-29T15:01:53+00:00"
         },
         {
             "name": "psr/cache",
@@ -3604,16 +3604,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.33",
+            "version": "10.5.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "4def7a9cda75af9c2bc179ed53a8e41313e7f7cf"
+                "reference": "aa0a8ce701ea7ee314b0dfaa8970dc94f3f8c870"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4def7a9cda75af9c2bc179ed53a8e41313e7f7cf",
-                "reference": "4def7a9cda75af9c2bc179ed53a8e41313e7f7cf",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/aa0a8ce701ea7ee314b0dfaa8970dc94f3f8c870",
+                "reference": "aa0a8ce701ea7ee314b0dfaa8970dc94f3f8c870",
                 "shasum": ""
             },
             "require": {
@@ -3685,7 +3685,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.33"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.36"
             },
             "funding": [
                 {
@@ -3701,7 +3701,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-09T06:06:56+00:00"
+            "time": "2024-10-08T15:36:51+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
@@ -5781,12 +5781,12 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "~8.1.0 | ~8.2.0 | ~8.3.0"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }
