@@ -46,7 +46,13 @@
   "extra": {
     "laminas": {
       "module": "Lmc\\Rbac\\Mvc\\DevTools"
+    },
+    "config":{
+      "platform": {
+        "php": "8.1.99"
+      }
     }
+
   },
   "scripts": {
     "check": [
