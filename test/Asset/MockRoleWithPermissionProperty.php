@@ -15,12 +15,12 @@ class MockRoleWithPermissionProperty implements RoleInterface
         return 'role-with-permission-property';
     }
 
-    public function hasPermission(string $permission): bool
+    public function hasPermission(string $name): bool
     {
         return false;
     }
 
-    public function addPermission(string $permission): void
+    public function addPermission(string $name): void
     {
     }
 
@@ -51,7 +51,6 @@ class MockRoleWithPermissionProperty implements RoleInterface
 
     public function addParent(RoleInterface $parent): void
     {
-
     }
 
     public function getParents(): iterable

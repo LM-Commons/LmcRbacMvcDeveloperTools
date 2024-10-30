@@ -24,10 +24,10 @@ namespace Lmc\Rbac\Mvc\DevTools\Collector;
 use InvalidArgumentException;
 use Laminas\DeveloperTools\Collector\CollectorInterface;
 use Laminas\Mvc\MvcEvent;
+use Laminas\Permissions\Rbac\RoleInterface;
 use Lmc\Rbac\Mvc\Options\ModuleOptions;
 use Lmc\Rbac\Mvc\Role\RecursiveRoleIterator;
 use Lmc\Rbac\Mvc\Service\RoleService;
-use Laminas\Permissions\Rbac\RoleInterface;
 use RecursiveIteratorIterator;
 use ReflectionException;
 use ReflectionProperty;
@@ -50,7 +50,7 @@ class RbacCollector implements CollectorInterface, Serializable
     /**
      * Collector priority
      */
-    const PRIORITY                        = -100;
+    public const PRIORITY                 = -100;
     protected array $collectedGuards      = [];
     protected array $collectedRoles       = [];
     protected array $collectedPermissions = [];
@@ -124,12 +124,12 @@ class RbacCollector implements CollectorInterface, Serializable
     private function collectIdentityRolesAndPermissions(RoleService $roleService): void
     {
         $identityRoles = $roleService->getIdentityRoles();
-        $iterator = new RecursiveIteratorIterator(
+        $iterator      = new RecursiveIteratorIterator(
             new RecursiveRoleIterator($identityRoles),
             RecursiveIteratorIterator::SELF_FIRST
         );
         foreach ($iterator as $role) {
-            $roleName = $role->getName();
+            $roleName               = $role->getName();
             $this->collectedRoles[] = $roleName;
             $this->collectPermissions($role);
             /*

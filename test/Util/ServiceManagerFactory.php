@@ -28,7 +28,7 @@ use Laminas\ServiceManager\ServiceManager;
 /**
  * Base test case to be used when a new service manager instance is required
  */
-abstract class ServiceManagerFactory
+class ServiceManagerFactory
 {
     /** @var array */
     private static array $config = [];

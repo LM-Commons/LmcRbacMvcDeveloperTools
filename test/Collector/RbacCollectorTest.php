@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -17,15 +19,15 @@
  * and is licensed under the MIT license.
  */
 
-declare(strict_types=1);
-
 namespace LmcTest\Rbac\Mvc\DevToolsTest\Collector;
 
 use Laminas\Mvc\Application;
 use Laminas\Mvc\ApplicationInterface;
 use Laminas\Mvc\MvcEvent;
+use Laminas\Permissions\Rbac\RoleInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Lmc\Rbac\Identity\IdentityInterface;
+use Lmc\Rbac\Mvc\DevTools\Collector\RbacCollector;
 use Lmc\Rbac\Mvc\Guard\ControllerGuard;
 use Lmc\Rbac\Mvc\Guard\GuardInterface;
 use Lmc\Rbac\Mvc\Guard\RouteGuard;
@@ -34,10 +36,8 @@ use Lmc\Rbac\Mvc\Options\ModuleOptions;
 use Lmc\Rbac\Mvc\Role\RecursiveRoleIteratorStrategy;
 use Lmc\Rbac\Mvc\Service\RoleService;
 use Lmc\Rbac\Role\InMemoryRoleProvider;
-use Laminas\Permissions\Rbac\RoleInterface;
 use Lmc\Rbac\Role\RoleProviderInterface;
 use Lmc\Rbac\Service\RoleService as BaseRoleService;
-use Lmc\Rbac\Mvc\DevTools\Collector\RbacCollector;
 use LmcTest\Rbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionMethod;
 use LmcTest\Rbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionProperty;
 use LmcTest\Rbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionTraversable;
@@ -111,12 +111,12 @@ class RbacCollectorTest extends TestCase
         $collector = new RbacCollector();
         $collector->collect($mvcEvent);
         $expectedCollection = [
-            'guards' => [],
-            'roles' => [],
+            'guards'      => [],
+            'roles'       => [],
             'permissions' => [],
-            'options' => [],
+            'options'     => [],
         ];
-        $test = $collector->getCollection();
+        $test               = $collector->getCollection();
         $this->assertEquals($expectedCollection, $collector->getCollection());
     }
 
@@ -151,7 +151,7 @@ class RbacCollectorTest extends TestCase
         ];
 
         $serviceManager = new ServiceManager();
-        $application    = $this->createMock('Laminas\Mvc\ApplicationInterface');
+        $application    = $this->createMock(ApplicationInterface::class);
         $application->expects($this->once())->method('getServiceManager')->willReturn($serviceManager);
 
         $mvcEvent = new MvcEvent();
@@ -187,7 +187,8 @@ class RbacCollectorTest extends TestCase
                 ],
             ],
             'roles'       => [
-                'member', 'guest',
+                'member',
+                'guest',
 //                'member' => ['guest'],
             ],
             'permissions' => [
