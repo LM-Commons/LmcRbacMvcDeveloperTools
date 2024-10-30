@@ -105,8 +105,6 @@ class RbacCollector implements CollectorInterface, Serializable
 
     /**
      * Collect guards
-     *
-     * @param array $guards
      */
     private function collectGuards(array $guards): void
     {
