@@ -1,4 +1,5 @@
 # LmcRbacMvc Developer Tools
+
 [![Build](https://github.com/lm-commons/LmcRbacMvcDeveloperTools/actions/workflows/build_test.yml/badge.svg)](https://github.com/lm-commons/LmcRbacMvcDeveloperTools/actions/workflows/build_test.yml)
 [![Version](http://poser.pugx.org/lm-commons/lmc-rbac-mvc-devtools/version)](https://packagist.org/packages/lm-commons/lmc-rbac-mvc-devtools)[![Total Downloads](http://poser.pugx.org/lm-commons/lmc-rbac-mvc-devtools/downloads)](https://packagist.org/packages/lm-commons/lmc-rbac-mvc-devtools)
 [![License](https://poser.pugx.org/lm-commons/lmc-rbac/license)](https://packagist.org/packages/lm-commons/lmc-rbac)
@@ -7,7 +8,6 @@
 [![Static Badge](https://img.shields.io/badge/Chat_on-Slack-blue)](https://join.slack.com/t/lm-commons/shared_invite/zt-2gankt2wj-FTS45hp1W~JEj1tWvDsUHQ)
 
 ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Flm-commons%2Flmcrbacmvcdevelopertools%2Fproperties%2Fvalues&query=%24%5B%3A1%5D.value&label=Maintenance%20Status)
-
 
 Laminas MVC Developer Tools extension for [LmcRbacMvc](https://github.com/LM-Commons/LmcRbacMvc).
 
@@ -31,4 +31,3 @@ go in `development.config.php`.
 
 - File issues at https://github.com/LM-Commons/LmcRbacMvcDeveloperTools/issues
 - Ask questions in the [LM-Commons Slack](https://join.slack.com/t/lm-commons/shared_invite/zt-2gankt2wj-FTS45hp1W~JEj1tWvDsUHQ) chat.
-
