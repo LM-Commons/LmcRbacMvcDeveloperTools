@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -16,6 +19,7 @@
  * and is licensed under the MIT license.
  */
 
+use Composer\Autoload\ClassLoader;
 use LmcTest\Rbac\Mvc\DevToolsTest\Util\ServiceManagerFactory;
 
 ini_set('error_reporting', E_ALL);
@@ -26,6 +30,7 @@ $files = [
 
 foreach ($files as $file) {
     if (file_exists($file)) {
+        /** @var ClassLoader $loader */
         $loader = require $file;
         break;
     }
@@ -35,6 +40,7 @@ if (! isset($loader)) {
     throw new RuntimeException('vendor/autoload.php could not be found. Did you install via composer?');
 }
 
+/** @var array $config */
 $config = require __DIR__ . '/TestConfiguration.php';
 ServiceManagerFactory::setApplicationConfig($config);
 unset($files, $file, $loader, $config);

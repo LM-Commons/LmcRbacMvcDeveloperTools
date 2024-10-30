@@ -24,18 +24,18 @@ namespace LmcTest\Rbac\Mvc\DevToolsTest\Util;
 use Laminas\ModuleManager\ModuleManagerInterface;
 use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\ServiceManager\ServiceManager;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Base test case to be used when a new service manager instance is required
  */
-abstract class ServiceManagerFactory
+class ServiceManagerFactory
 {
-    /** @var array */
     private static array $config = [];
 
     /**
      * @static
-     * @param array $config
      */
     public static function setApplicationConfig(array $config): void
     {
@@ -44,7 +44,6 @@ abstract class ServiceManagerFactory
 
     /**
      * @static
-     * @return array
      */
     public static function getApplicationConfig(): array
     {
@@ -53,6 +52,8 @@ abstract class ServiceManagerFactory
 
     /**
      * @param array|null $config
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public static function getServiceManager(?array $config = null): ServiceManager
     {

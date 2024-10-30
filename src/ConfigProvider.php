@@ -31,7 +31,8 @@ class ConfigProvider
     {
         return [
             'template_map' => [
-                'laminas-developer-tools/toolbar/lmc-rbac' => __DIR__ . '/../view/laminas-developer-tools/toolbar/lmc-rbac.phtml',
+                'laminas-developer-tools/toolbar/lmc-rbac'
+                    => __DIR__ . '/../view/laminas-developer-tools/toolbar/lmc-rbac.phtml',
             ],
         ];
     }

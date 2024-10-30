@@ -18,7 +18,7 @@ class MockRoleWithPermissionMethod implements RoleInterface
         return 'role-with-permission-method';
     }
 
-    public function hasPermission($name): bool
+    public function hasPermission(string $name): bool
     {
         return false;
     }

@@ -1,3 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.25.0@01a8eb06b9e9cc6cfb6a320bf9fb14331919d505">
+<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
+  <file src="src/Collector/RbacCollector.php">
+    <DocblockTypeContradiction>
+      <code><![CDATA[null === $application]]></code>
+    </DocblockTypeContradiction>
+  </file>
+  <file src="test/Collector/RbacCollectorTest.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$collector->serialize()]]></code>
+      <code><![CDATA[$collector->serialize()]]></code>
+    </PossiblyNullArgument>
+  </file>
+  <file src="test/ConfigProviderTest.php">
+    <MixedArgument>
+      <code><![CDATA[$result['template_map']['laminas-developer-tools/toolbar/lmc-rbac']]]></code>
+      <code><![CDATA[$result['view_manager']['template_map']['laminas-developer-tools/toolbar/lmc-rbac']]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$result['template_map']['laminas-developer-tools/toolbar/lmc-rbac']]]></code>
+      <code><![CDATA[$result['view_manager']['template_map']]]></code>
+      <code><![CDATA[$result['view_manager']['template_map']['laminas-developer-tools/toolbar/lmc-rbac']]]></code>
+    </MixedArrayAccess>
+    <MixedArrayAssignment>
+      <code><![CDATA[$result['template_map']['laminas-developer-tools/toolbar/lmc-rbac']]]></code>
+      <code><![CDATA[$result['view_manager']['template_map']]]></code>
+      <code><![CDATA[$result['view_manager']['template_map']['laminas-developer-tools/toolbar/lmc-rbac']]]></code>
+    </MixedArrayAssignment>
+  </file>
+  <file src="test/Util/ServiceManagerFactory.php">
+    <MixedArgument>
+      <code><![CDATA[$config['service_manager'] ?? []]]></code>
+    </MixedArgument>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getServiceManager]]></code>
+    </PossiblyUnusedMethod>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$config]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
 </files>
