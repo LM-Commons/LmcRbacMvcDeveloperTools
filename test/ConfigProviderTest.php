@@ -16,7 +16,7 @@ use function realpath;
  */
 class ConfigProviderTest extends TestCase
 {
-    public function testProvidesExpectedConfig()
+    public function testProvidesExpectedConfig(): void
     {
         $provider                      = new ConfigProvider();
         $expectedDependencyConfig      = [
@@ -36,12 +36,14 @@ class ConfigProviderTest extends TestCase
                 ],
             ],
         ];
+        /*
         $expectedViewManagerConfig     = [
             'template_map' => [
                 'laminas-developer-tools/toolbar/lmc-rbac'
                     => realpath(__DIR__ . '/../view/laminas-developer-tools/toolbar/lmc-rbac.phtml'),
             ],
         ];
+        */
         $this->assertEquals($expectedDependencyConfig, $provider->getDependencies());
         $this->assertEquals($expectedLaminasDevtoolsConfig, $provider->getLaminasDeveloperToolsConfig());
         // View Manager config

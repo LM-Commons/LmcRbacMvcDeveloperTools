@@ -78,16 +78,16 @@ class RbacCollector implements CollectorInterface, Serializable
      */
     public function collect(MvcEvent $mvcEvent): void
     {
-        if (! $application = $mvcEvent->getApplication()) {
+        $application = $mvcEvent->getApplication();
+        if (null === $application) {
             return;
         }
-
         $serviceManager = $application->getServiceManager();
-/** @var RoleService $roleService */
+        /** @var RoleService $roleService */
         $roleService = $serviceManager->get(RoleService::class);
-/** @var ModuleOptions $options */
+        /** @var ModuleOptions $options */
         $options = $serviceManager->get(ModuleOptions::class);
-         $this->collectOptions($options);
+        $this->collectOptions($options);
         $this->collectGuards($options->getGuards());
         $this->collectIdentityRolesAndPermissions($roleService);
     }
@@ -109,6 +109,7 @@ class RbacCollector implements CollectorInterface, Serializable
     private function collectGuards(array $guards): void
     {
         $this->collectedGuards = [];
+        /** @var array $rules */
         foreach ($guards as $type => $rules) {
             $this->collectedGuards[$type] = $rules;
         }
@@ -126,6 +127,7 @@ class RbacCollector implements CollectorInterface, Serializable
             new RecursiveRoleIterator($identityRoles),
             RecursiveIteratorIterator::SELF_FIRST
         );
+        /** @var RoleInterface $role */
         foreach ($iterator as $role) {
             $roleName               = $role->getName();
             $this->collectedRoles[] = $roleName;
@@ -157,17 +159,19 @@ class RbacCollector implements CollectorInterface, Serializable
     private function collectPermissions(RoleInterface $role): void
     {
         if (method_exists($role, 'getPermissions')) {
+            /** @var array<string>|Traversable $permissions */
             $permissions = $role->getPermissions();
         } else {
             $reflectionProperty = new ReflectionProperty($role, 'permissions');
-            $permissions        = $reflectionProperty->getValue($role);
+            /** @var array<string>|Traversable $permissions */
+            $permissions = $reflectionProperty->getValue($role);
         }
 
         if ($permissions instanceof Traversable) {
             $permissions = iterator_to_array($permissions);
         }
 
-        array_walk($permissions, function (&$permission) {
+        array_walk($permissions, function (mixed &$permission) {
             $permission = (string) $permission;
         });
         $this->collectedPermissions[$role->getName()] = array_values($permissions);
@@ -218,9 +222,13 @@ class RbacCollector implements CollectorInterface, Serializable
 
     public function __unserialize(array $data): void
     {
-        $this->collectedGuards      = $data['guards'];
-        $this->collectedRoles       = $data['roles'];
+        /** @psalm-suppress MixedAssignment*/
+        $this->collectedGuards = $data['guards'];
+        /** @psalm-suppress MixedAssignment*/
+        $this->collectedRoles = $data['roles'];
+        /** @psalm-suppress MixedAssignment*/
         $this->collectedPermissions = $data['permissions'];
-        $this->collectedOptions     = $data['options'];
+        /** @psalm-suppress MixedAssignment*/
+        $this->collectedOptions = $data['options'];
     }
 }

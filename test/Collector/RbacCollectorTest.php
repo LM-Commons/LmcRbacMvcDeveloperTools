@@ -21,6 +21,8 @@ declare(strict_types=1);
 
 namespace LmcTest\Rbac\Mvc\DevToolsTest\Collector;
 
+use Exception;
+use InvalidArgumentException;
 use Laminas\Mvc\Application;
 use Laminas\Mvc\ApplicationInterface;
 use Laminas\Mvc\MvcEvent;
@@ -42,6 +44,7 @@ use LmcTest\Rbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionMethod;
 use LmcTest\Rbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionProperty;
 use LmcTest\Rbac\Mvc\DevToolsTest\Asset\MockRoleWithPermissionTraversable;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 
 use function serialize;
 use function unserialize;
@@ -58,11 +61,15 @@ class RbacCollectorTest extends TestCase
         $this->assertSame('lmc_rbac', $collector->getName());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSerialize(): void
     {
         $collector  = new RbacCollector();
         $serialized = $collector->serialize();
         $this->assertIsString($serialized);
+        /** @var array $unserialized */
         $unserialized = unserialize($serialized);
         $this->assertSame([], $unserialized['guards']);
         $this->assertSame([], $unserialized['roles']);
@@ -89,7 +96,7 @@ class RbacCollectorTest extends TestCase
         $serialized   = serialize($unserialized);
         $collector->unserialize($serialized);
         $collection = $collector->getCollection();
-        $this->assertIsArray($collection);
+//        $this->assertIsArray($collection);
         $this->assertSame(['foo' => 'bar'], $collection['guards']);
         $this->assertSame(['foo' => 'bar'], $collection['roles']);
         $this->assertSame(['foo' => 'bar'], $collection['options']);
@@ -98,13 +105,16 @@ class RbacCollectorTest extends TestCase
 
     public function testUnserializeThrowsInvalidArgumentException(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $collector    = new RbacCollector();
         $unserialized = 'not_an_array';
         $serialized   = serialize($unserialized);
         $collector->unserialize($serialized);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function testCollectNothingIfNoApplicationIsSet(): void
     {
         $mvcEvent  = new MvcEvent();
@@ -116,10 +126,15 @@ class RbacCollectorTest extends TestCase
             'permissions' => [],
             'options'     => [],
         ];
-        $test               = $collector->getCollection();
+//        $test               = $collector->getCollection();
         $this->assertEquals($expectedCollection, $collector->getCollection());
     }
 
+    /**
+     * @throws ReflectionException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     * @throws Exception
+     */
     public function testCanCollect(): void
     {
         $dataToCollect = [
